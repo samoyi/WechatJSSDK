@@ -1,3 +1,4 @@
 {
-	"hongfangzi": ["wx2e87611162aae7f4", "9aef7e06d6c0cf735762e2982fa755ca"]
+	"hongfangzi": ["hongfangzi_appid", "hongfangzi_appsecret"],
+	"haoyunlai": ["haoyunlai_appid", "haoyunlai_appsecret"]
 }
