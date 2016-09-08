@@ -1,7 +1,14 @@
+# 多个微信公众号网页分享设置管理
 
+### 功能：
+管理多个微信公众号的网页分享设置，多个公众号使用相同的分享代码，只需要填写简单的几个参数
 
-删除有数据信息的历史版本中  
+### 使用方法：
+1. 在 mpInfo.json 文件中填写所有微信公众号的 AppID 和 AppSecret
+2. 将 WechatShare 文件夹放到主页面（这里是index.php）同级的位置
+3. 在主页面中添加 index.php 中的那段 php 代码并填写设置
 
+### 注意事项：
+1. 官方示例文件默认所有文件都是同级而不像这里又有一层，所以这里的代码中有几处在官方文件中改写了路径。搜索“WechatShare”可找到。
+2. 尚不清楚的原因，某些公众号在某些时候不能正常分享，即使是使用微信官方文件。
 
-
-http://stackoverflow.com/questions/37937984/git-refusing-to-merge-unrelated-histories
