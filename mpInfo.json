@@ -1,6 +1,5 @@
 {
 	"hongfangzi": ["hongfangzi_appid", "hongfangzi_appsecret"],
 	"haoyunlai": ["haoyunlai_appid", "haoyunlai_appsecret"],
-	"qiaolemei": ["qiaolemei_appid", "qiaolemei_appsecret"],
-	"funca": ["funca_appid", "funca_appsecret"]
+	"qiaolemei": ["qiaolemei_appid", "qiaolemei_appsecret"]
 }
