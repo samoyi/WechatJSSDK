@@ -11,8 +11,9 @@
 <?php	
 	
 
-	// 公众号品牌拼音，参考 mpInfo.json 文件
-	$mpName = "hongfangzi"; 
+	// 公众号 APPID 和 APPSECRET
+	define('APPID', 'your APPID');
+	define('APPSECRET', 'your APPSECRET');
 
 
 	// 分享信息

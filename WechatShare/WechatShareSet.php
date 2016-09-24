@@ -1,17 +1,13 @@
 <?php
 
     require_once "jssdk.php";
-    $info = json_decode( file_get_contents("WechatShare/mpInfo.json") );
-  
-    $infoArr = $info->$mpName;
-    $jssdk = new JSSDK($infoArr[0], $infoArr[1]);//初始化修改。修改为需要的微信公众好的AppID和AppSecret
+
+    $jssdk = new JSSDK(APPID, APPSECRET);//初始化修改。修改为需要的微信公众好的AppID和AppSecret
     $signPackage = $jssdk->GetSignPackage();
 
-  echo '<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>';
+    echo '<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>';
 
 ?>
-
-
 
 
 <script>
