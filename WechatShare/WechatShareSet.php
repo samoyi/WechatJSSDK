@@ -44,12 +44,11 @@ wx.ready(function ()
 
     function setShare()
     {
-
        wx.onMenuShareTimeline(
        {
-           title: "<?php echo $shareInfo['WechatShareTimelineTitle']; ?>", // 分享标题
-           link: "<?php echo $shareInfo['WechatShareTimelineLink']; ?>", // 分享链接
-           imgUrl: "<?php echo $shareInfo['WechatShareTimelineImgURL']; ?>", // 分享图标
+           title: aShareInfo[0], // 分享标题
+           link: aShareInfo[1], // 分享链接
+           imgUrl: aShareInfo[2], // 分享图标
            success: function ()
            {
                // 用户确认分享后执行的回调函数
@@ -62,10 +61,10 @@ wx.ready(function ()
 
        wx.onMenuShareAppMessage(
        {
-           title: "<?php echo $shareInfo['WechatShareAppMessageTitle']; ?>", // 分享标题
-           desc: "<?php echo $shareInfo['WechatShareAppMessageDesc']; ?>", // 分享描述
-           link: "<?php echo $shareInfo['WechatShareAppMessageLink']; ?>", // 分享链接
-           imgUrl: "<?php echo $shareInfo['WechatShareAppMessageImgURL']; ?>", // 分享图标
+           title: aShareInfo[3], // 分享标题
+           desc: aShareInfo[4], // 分享描述
+           link: aShareInfo[5], // 分享链接
+           imgUrl: aShareInfo[6], // 分享图标
            type: '', // 分享类型,music、video或link，不填默认为link
            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
            success: function ()
