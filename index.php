@@ -9,6 +9,15 @@
 
 </body>
 <script>
+
+aJSSDKAPI = [
+		'onMenuShareTimeline', // 分享到朋友圈
+      	'onMenuShareAppMessage',  // 分享给朋友
+      	'getLocation', // 获取用户坐标 
+];
+
+
+
 	// 分享信息，七项数组
 	var aShareInfo = [ 
 		'分享到朋友圈的标题', //分享到朋友圈的标题
@@ -35,7 +44,7 @@
     $setShareEventType = ''; // 在以 $setShareEventObjectID 为ID的对象上触发该事件类型时才设置上述分享内容。
     
 
-	include("WechatShare/WechatShareSet.php");
+	include("jssdk_set/jssdk_set.php");
 ?>
 </html>
    

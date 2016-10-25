@@ -102,10 +102,10 @@ class JSSDK {
   }
 
   private function get_php_file($filename) {
-    return trim(substr(file_get_contents("WechatShare/" . $filename), 15));
+    return trim(substr(file_get_contents("jssdk_set/" . $filename), 15));
   }
   private function set_php_file($filename, $content) {
-    $fp = fopen("WechatShare/" . $filename, "w");
+    $fp = fopen("jssdk_set/" . $filename, "w");
     fwrite($fp, "<?php exit();?>" . $content);
     fclose($fp);
   }

@@ -6,6 +6,7 @@
     $signPackage = $jssdk->GetSignPackage();
 
     echo '<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>';
+    echo '<script src="jssdk_set/jssdk_setter.js"></script>';
 
 ?>
 
@@ -23,9 +24,11 @@ wx.config(
     [
       // 所有要调用的 API 都要加到这个列表中
       'onMenuShareTimeline',
-      'onMenuShareAppMessage'
+      'onMenuShareAppMessage',
+      'getLocation'
     ]
 });
+
 
 
 wx.ready(function ()
@@ -76,6 +79,20 @@ wx.ready(function ()
                // 用户取消分享后执行的回调函数
            }
        });
+
+
+       wx.getLocation(
+       {
+            type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+            success: function (res) 
+            {
+                var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                var speed = res.speed; // 速度，以米/每秒计
+                var accuracy = res.accuracy; // 位置精度
+                document.write(longitude+ "," + latitude + " " + accuracy);
+            }
+        });
     }
 });
 </script>
