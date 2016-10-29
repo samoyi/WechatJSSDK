@@ -10,6 +10,18 @@
 		{
 			$this->appId = $appId;
 			$this->appSecret = $appSecret;
+			
+			// 动态创建 jsapi_ticket.php 文件
+			if( !is_file("jssdk_set/jsapi_ticket.php") )
+			{
+				$jsapi_ticket_content = '<?php exit();?>
+{"jsapi_ticket":"","expire_time":0}';
+				file_put_contents("jssdk_set/jsapi_ticket.php", $jsapi_ticket_content);
+				
+				$access_token_content = '<?php exit();?>
+{"access_token":"","expire_time":0}';
+				file_put_contents("jssdk_set/access_token.php", $access_token_content);
+			}
 		}
 
 		public function getSignPackage() 
@@ -54,7 +66,7 @@
 		private function getJsApiTicket() 
 		{
 			// jsapi_ticket 应该全局存储与更新，以下代码以写入到文件中做示例
-			$data = json_decode($this->get_php_file("jsapi_ticket.php"));
+			$data = json_decode($this->get_php_file("jssdk_set/jsapi_ticket.php"));
 			if ($data->expire_time < time()) 
 			{
 				$accessToken = $this->getAccessToken();
@@ -67,7 +79,7 @@
 				{
 					$data->expire_time = time() + 7000;
 					$data->jsapi_ticket = $ticket;
-					$this->set_php_file("jsapi_ticket.php", json_encode($data));
+					$this->set_php_file("jssdk_set/jsapi_ticket.php", json_encode($data));
 				}
 			} 
 			else 
@@ -121,11 +133,11 @@
 
 		private function get_php_file($filename) 
 		{
-			return trim(substr(file_get_contents("jssdk_set/" . $filename), 15));
+			return trim(substr(file_get_contents($filename), 15));
 		}
 		private function set_php_file($filename, $content) 
 		{
-			$fp = fopen("jssdk_set/" . $filename, "w");
+			$fp = fopen($filename, "w");
 			fwrite($fp, "<?php exit();?>" . $content);
 			fclose($fp);
 		}

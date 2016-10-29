@@ -12,4 +12,11 @@
 1. 官方示例文件默认所有文件都是同级而不像这里又有一层，所以这里的代码中有几处在官方文件中改写了路径。搜索“jssdk_set”可找到。
 2. 如果出现 *invalid url domain* 的错误提示，可能可以通过设置公众号 **JS接口安全域名** 来解决：进入公众平台——点击公众平台logo——功能设置——JS接口安全域名 
 
+### 对官方文件的合并
+1. 直接将 jssdk.php 中的代码（JSSDK类）写进 jssdk_set.php
+2. 在JSSDK类构造函数中创建 jsapi_ticket.php 和 access_token.php
 
+
+## TODO
+* 将文件中的 jssdk_set 路径换成动态获取
+* 看看这里官方缓存token的方法是否比我在红房子中写的更好
