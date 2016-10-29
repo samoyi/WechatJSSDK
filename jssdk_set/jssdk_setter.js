@@ -32,6 +32,3 @@ function Jssdk_setter(name, age, job)
 		};
 	}
 }
-var friend = new Jssdk_setter("Nicholas", 29, "Software Engineer");
-friend.sayName();
-friend.saySth();
