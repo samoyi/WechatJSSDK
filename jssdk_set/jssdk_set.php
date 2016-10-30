@@ -92,7 +92,7 @@
 		private function getAccessToken() 
 		{
 			// access_token 应该全局存储与更新，以下代码以写入到文件中做示例
-			$data = json_decode($this->get_php_file("access_token.php"));
+			$data = json_decode($this->get_php_file("jssdk_set/access_token.php"));
 			if ($data->expire_time < time()) 
 			{
 				// 如果是企业号用以下URL获取access_token
@@ -141,15 +141,14 @@
 			fwrite($fp, "<?php exit();?>" . $content);
 			fclose($fp);
 		}
-}
+	}
 
 
 
-    $jssdk = new JSSDK(APPID, APPSECRET);//初始化修改。修改为需要的微信公众好的AppID和AppSecret
+    $jssdk = new JSSDK(APPID, APPSECRET);
     $signPackage = $jssdk->GetSignPackage();
 
     echo '<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>';
-    echo '<script src="jssdk_set/jssdk_setter.js"></script>';
 
 ?>
 
@@ -168,6 +167,7 @@ wx.config(
       // 所有要调用的 API 都要加到这个列表中
       'onMenuShareTimeline',
       'onMenuShareAppMessage',
+	  'chooseImage',
       'getLocation'
     ]
 });
@@ -190,7 +190,7 @@ wx.ready(function ()
 
     function setShare()
     {
-       wx.onMenuShareTimeline(
+       /* wx.onMenuShareTimeline(
        {
            title: aShareInfo[0], // 分享标题
            link: aShareInfo[1], // 分享链接
@@ -221,7 +221,7 @@ wx.ready(function ()
            {
                // 用户取消分享后执行的回调函数
            }
-       });
+       }); */
 
 
        wx.getLocation(
@@ -235,6 +235,8 @@ wx.ready(function ()
                 var accuracy = res.accuracy; // 位置精度
             }
         });
+		
+		
     }
 });
 </script>
