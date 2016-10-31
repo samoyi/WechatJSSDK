@@ -8,18 +8,19 @@
 
 ### 使用方法：
 1. 将 jssdk_set 文件夹放到主页面（这里是index.php）同级的位置
-2. ready回调时调用和其他时候再调用  之前设置的分享事件也就不需要了
+2. 在这页面填写APPID和APPSECRET
+3. 在具体调用接口的代码之前引入 APIInvoking.js 文件，即这里index.php中的 ```<script src="jssdk_set/APIInvoking.js"></script>```
+4. 在wx.ready回调时就要调用的接口直接放进其回调函数中，之后再调用的接口可以放到外部
 
 ### 注意事项：
-1. 官方示例文件默认所有文件都是同级而不像这里又有一层，所以这里的代码中有几处在官方文件中改写了路径。搜索“jssdk_set”可找到。
-2. 如果出现 *invalid url domain* 的错误提示，可能可以通过设置公众号 **JS接口安全域名** 来解决：进入公众平台——点击公众平台logo——功能设置——JS接口安全域名 
+* 如果出现 *invalid url domain* 的错误提示，可能可以通过设置公众号 **JS接口安全域名** 来解决：进入公众平台——点击公众平台logo——功能设置——JS接口安全域名 
 
 ### 对官方文件的合并
 1. 直接将 jssdk.php 中的代码（JSSDK类）写进 jssdk_set.php
-2. 在JSSDK类构造函数中创建 jsapi_ticket.php 和 access_token.php
+2. 在JSSDK类构造函数中动态创建 jsapi_ticket.php 和 access_token.php
 
-### 未实现的接口
 
+### 不打算实现的接口
 * 分享到腾讯微博
 * 分享到QQ空间
 
