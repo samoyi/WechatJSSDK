@@ -16,6 +16,10 @@
 1. 直接将 jssdk.php 中的代码（JSSDK类）写进 jssdk_set.php
 2. 在JSSDK类构造函数中创建 jsapi_ticket.php 和 access_token.php
 
+### 未实现的接口
+
+* 分享到腾讯微博
+* 分享到QQ空间
 
 ## TODO
 * 将文件中的 jssdk_set 路径换成动态获取

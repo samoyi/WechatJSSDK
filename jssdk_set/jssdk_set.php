@@ -167,76 +167,45 @@ wx.config(
       // 所有要调用的 API 都要加到这个列表中
       'onMenuShareTimeline',
       'onMenuShareAppMessage',
+	  'onMenuShareQQ',
 	  'chooseImage',
-      'getLocation'
+	  'previewImage',
+	  'uploadImage',
+	  'downloadImage',
+	  'startRecord',
+	  'stopRecord',
+	  'onVoiceRecordEnd',
+	  'playVoice',
+	  'pauseVoice',
+	  'stopVoice',
+	  'onVoicePlayEnd',
+	  'uploadVoice',
+	  'downloadVoice',
+	  'translateVoice',
+	  'getNetworkType',
+	  'openLocation',
+      'getLocation',
+	  'startSearchBeacons',
+	  'stopSearchBeacons',
+	  'onSearchBeacons',
+	  'hideOptionMenu',
+	  'showOptionMenu',
+	  'closeWindow',
+	  'hideMenuItems',
+	  'showMenuItems',
+	  'hideAllNonBaseMenuItem',
+	  'showAllNonBaseMenuItem',
+	  'scanQRCode',
+	  'openProductSpecificView',
+	  'chooseCard',
+	  'addCard',
+	  'openCard',
+	  'consumeAndShareCard',
+	  'chooseWXPay'
     ]
 });
 
 
 
-wx.ready(function ()
-{
-    var setShareEventObject = document.getElementById("<?php echo $setShareEventObjectID; ?>"), //事件对象
-    setShareEventType = "<?php echo $setShareEventType; ?>"; // 事件类型
-    if( setShareEventObject )
-    {
-       setShareEventObject.addEventListener(setShareEventType, setShare, false);
-    }
-    else
-    {
-       setShare();
-    }
 
-
-    function setShare()
-    {
-       /* wx.onMenuShareTimeline(
-       {
-           title: aShareInfo[0], // 分享标题
-           link: aShareInfo[1], // 分享链接
-           imgUrl: aShareInfo[2], // 分享图标
-           success: function ()
-           {
-               // 用户确认分享后执行的回调函数
-           },
-           cancel: function ()
-           {
-               // 用户取消分享后执行的回调函数
-           }
-       });
-
-       wx.onMenuShareAppMessage(
-       {
-           title: aShareInfo[3], // 分享标题
-           desc: aShareInfo[4], // 分享描述
-           link: aShareInfo[5], // 分享链接
-           imgUrl: aShareInfo[6], // 分享图标
-           type: '', // 分享类型,music、video或link，不填默认为link
-           dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-           success: function ()
-           {
-               // 用户确认分享后执行的回调函数
-           },
-           cancel: function ()
-           {
-               // 用户取消分享后执行的回调函数
-           }
-       }); */
-
-
-       wx.getLocation(
-       {
-            type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-            success: function (res) 
-            {
-                var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-                var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-                var speed = res.speed; // 速度，以米/每秒计
-                var accuracy = res.accuracy; // 位置精度
-            }
-        });
-		
-		
-    }
-});
 </script>
