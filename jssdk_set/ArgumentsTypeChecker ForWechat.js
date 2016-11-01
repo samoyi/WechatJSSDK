@@ -50,7 +50,7 @@ function ArgumentsTypeChecker()
 			{	
 				alert( "The function " + sFunctionName + " expects " + nExpectedAmount + " arguments, " + nArgumentsLength + " given");
 				throw new Error( "The function " + sFunctionName + " expects " + nExpectedAmount + " arguments, " + nArgumentsLength + " given");
-			}
+			}	
 			return this;
 		};
 		
@@ -59,7 +59,7 @@ function ArgumentsTypeChecker()
 		 * sExpectedType is case-insensitive
 		 */
 		ArgumentsTypeChecker.prototype.checkArgumentsType = function(sFunctionName, aArguments, sExpectedType)
-		{	alert(1001);
+		{	
 			if( arguments.length < 3 )
 			{
 				alert( "ArgumentsTypeChecker.checkArgumentsType needs 3 arguments" );
@@ -69,7 +69,7 @@ function ArgumentsTypeChecker()
 			{
 				alert(  "The first arguments of ArgumentsTypeChecker.checkArgumentsType should be function name string" )
 				throw new TypeError(  "The first arguments of ArgumentsTypeChecker.checkArgumentsType should be function name string" )
-			}alert(11);
+			}
 			if( (typeof aArguments === "object") && ((aArguments.valueOf())[0] === "[") )
 			{
 				alert(  "The second arguments of ArgumentsTypeChecker.checkArgumentsType should be array of array-like object" )
@@ -80,7 +80,7 @@ function ArgumentsTypeChecker()
 				alert(  "The third arguments of ArgumentsTypeChecker.checkArgumentsType should be a string" )
 				throw new TypeError(  "The third arguments of ArgumentsTypeChecker.checkArgumentsType should be a string" )
 			}
-			alert(22);
+			
 			sExpectedType = sExpectedType.toLocaleLowerCase();
 			var sType = "";
 			Array.prototype.forEach.call(aArguments, function(item, index)
@@ -91,7 +91,7 @@ function ArgumentsTypeChecker()
 					alert( "One of arguments in function " + sFunctionName + " has a wrong type, expected " + sExpectedType + ", " + sType + " given" );
 					throw new TypeError( "One of arguments in function " + sFunctionName + " has a wrong type, expected " + sExpectedType + ", " + sType + " given" );
 				}
-			});
+			});   
 			return this;
 		};
 		

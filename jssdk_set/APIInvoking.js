@@ -399,22 +399,23 @@ function InvokeWechatAPI()
 		 * 第二个参数为回调函数，接受一个参数，引用被下载的录音的localId
 		 */
 		InvokeWechatAPI.prototype.downloadVoice = function(sServerId, fnSuccessCallback)
-		{	alert(2);
+		{	
 			argumentsTypeChecker.checkArgumengsAmount("downloadVoice", arguments, 2)
-								.checkArgumentsType("downloadVoice", [sLocalId], "string")
+								.checkArgumentsType("downloadVoice", [sServerId], "string")
 								.checkArgumentsType("downloadVoice", [fnSuccessCallback], "function");
-			alert(3);					
+								
 			wx.downloadVoice(
 			{	
 				serverId: sServerId, // 需要下载的音频的服务器端ID，由uploadVoice接口获得
 				isShowProgressTips: 1, // 默认为1，显示进度提示
 				success: function (res) 
-				{	alert(4);	
+				{	
 					var localId = res.localId; // 返回音频的本地ID
 					fnSuccessCallback(localId);
 				}
 			});
 		};
+		
 		
 		
 		// 获取网络状态接口
@@ -434,6 +435,7 @@ function InvokeWechatAPI()
 				}
 			});
 		};
+		
 		
 		
 		// 使用微信内置地图查看位置接口

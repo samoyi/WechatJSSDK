@@ -3,7 +3,6 @@
 /*
  * 支持链式调用。但如果调用链某个方法报错后就不会执行后面的方法
  *
- *
  * TODO： 链式调用每个方法都需要输入函数名，麻烦
  *
  *
@@ -30,22 +29,22 @@ function ArgumentsTypeChecker()
 			}
 			if( typeof sFunctionName !== "string" )
 			{
-				throw new TypeError(  "The first arguments of ArgumentsTypeChecker.checkArgumengsAmount should be function name string" )
+				throw new TypeError(  "The first arguments of ArgumentsTypeChecker.checkArgumengsAmount should be function name string" );
 			}
 			if( (typeof aArguments === "object") && ((aArguments.valueOf())[0] === "[") )
 			{
-				throw new TypeError(  "The second arguments of ArgumentsTypeChecker.checkArgumengsAmount should be array of array-like object" )
+				throw new TypeError(  "The second arguments of ArgumentsTypeChecker.checkArgumengsAmount should be array of array-like object" );
 			}
 			if( typeof nExpectedAmount !== "number" )
 			{
-				throw new TypeError(  "The third arguments of ArgumentsTypeChecker.checkArgumengsAmount should be a number" )
+				throw new TypeError(  "The third arguments of ArgumentsTypeChecker.checkArgumengsAmount should be a number" );
 			}
 			
 			var nArgumentsLength = aArguments.length;
 			if( nArgumentsLength < nExpectedAmount )
 			{	
 				throw new Error( "The function " + sFunctionName + " expects " + nExpectedAmount + " arguments, " + nArgumentsLength + " given");
-			}
+			}	
 			return this;
 		};
 		
@@ -57,19 +56,20 @@ function ArgumentsTypeChecker()
 		{	
 			if( arguments.length < 3 )
 			{
+
 				throw new Error( "ArgumentsTypeChecker.checkArgumentsType needs 3 arguments" );
 			}
 			if( typeof sFunctionName !== "string" )
 			{
-				throw new TypeError(  "The first arguments of ArgumentsTypeChecker.checkArgumentsType should be function name string" )
+				throw new TypeError(  "The first arguments of ArgumentsTypeChecker.checkArgumentsType should be function name string" );
 			}
 			if( (typeof aArguments === "object") && ((aArguments.valueOf())[0] === "[") )
 			{
-				throw new TypeError(  "The second arguments of ArgumentsTypeChecker.checkArgumentsType should be array of array-like object" )
+				throw new TypeError(  "The second arguments of ArgumentsTypeChecker.checkArgumentsType should be array of array-like object" );
 			}
 			if( typeof sExpectedType !== "string" )
 			{
-				throw new TypeError(  "The third arguments of ArgumentsTypeChecker.checkArgumentsType should be a string" )
+				throw new TypeError(  "The third arguments of ArgumentsTypeChecker.checkArgumentsType should be a string" );
 			}
 			
 			sExpectedType = sExpectedType.toLocaleLowerCase();
@@ -81,7 +81,7 @@ function ArgumentsTypeChecker()
 				{	
 					throw new TypeError( "One of arguments in function " + sFunctionName + " has a wrong type, expected " + sExpectedType + ", " + sType + " given" );
 				}
-			});
+			});   
 			return this;
 		};
 		
@@ -97,7 +97,7 @@ function ArgumentsTypeChecker()
 			}
 			if( typeof sFunctionName !== "string" )
 			{
-				throw new TypeError(  "The first arguments of ArgumentsTypeChecker.confirmPlainObject should be function name string" )
+				throw new TypeError(  "The first arguments of ArgumentsTypeChecker.confirmPlainObject should be function name string" );
 			}
 			
 			var sTypeGiven = getTypeWithLowerCase( checkedArgument );
