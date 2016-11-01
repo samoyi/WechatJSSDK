@@ -9,8 +9,46 @@
 
 function InvokeWechatAPI()
 {
+	var argumentsTypeChecker = new ArgumentsTypeChecker();
+
+	
 	// public functions ------------------------------------------------------
 
+	// get type of checked with lower case
+	function showTypeWithLowerCase( checked )
+	{
+		var sType = Object.prototype.toString.call(checked).slice(8, -1);
+		return sType.toLowerCase();
+	}
+	
+	// 检查一个组参数是否都是是指定类型
+	/*
+	 * 第一个参数是被检查的函数名，用来报错是提示是哪个函数
+	 * 第二个参数是要检查的参数组成的数组或整个arguments对象
+	 * 第三个参数是期望的类型，如果被检测参数中有一项不是该类型就会报错，不区分大小写
+	 */
+	function confirmArgumentsType(sFunctionName, aArguments, sExpectedType)
+	{
+		sExpectedType = sExpectedType.toLocaleLowerCase();
+		Array.prototype.forEach.call(aArguments, function(item, index)
+		{
+			if( showTypeWithLowerCase( item ) !== sExpectedType )
+			{
+				throw new TypeError( sFunctionName + "方法的参数类型错误，期望类型为：" + sExpectedType );
+			}
+		});
+	}
+	
+	// 如果设置了某个参数，该参数是否是引用类型
+	function checkupConfigurationArgument(sFunctionName, oConfigurationArgument)
+	{
+		if( oConfigurationArgument && (typeof oConfigurationArgument !== "object") )
+		{
+			throw new TypeError(sFunctionName + "方法参数只能是object类型");
+		}
+	}
+	
+	
 	// Polyfill Object.assign
 	if (typeof Object.assign != 'function') 
 	{
@@ -45,14 +83,8 @@ function InvokeWechatAPI()
 		})();
 	}
 	
-	// 如果设置了某个参数，该参数是引用类型
-	function checkupConfigurationArgument(sFunctionName, oConfigurationArgument)
-	{
-		if( oConfigurationArgument && (typeof oConfigurationArgument !== "object") )
-		{
-			throw new TypeError(sFunctionName + "方法参数只能是object类型");
-		}
-	}
+	
+	
 	
 
 	
@@ -71,7 +103,8 @@ function InvokeWechatAPI()
 			{
 				throw new Error("onMenuShareTimeline方法至少需要三个字符串参数来指定分享标题、分享链接和分享图标");
 			}
-			checkupConfigurationArgument("onMenuShareTimeline", arguments[3]);
+			argumentsTypeChecker.confirmPlainObject( "onMenuShareTimeline", arguments[3], true);
+			
 			var oDefaultConfiguration = 
 			{
 			   title: sTitle, // 分享标题
@@ -92,7 +125,8 @@ function InvokeWechatAPI()
 			{
 				throw new Error("onMenuShareAppMessage方法至少需要四个字符串参数来指定分享标题、分享描述、分享链接和分享图标");
 			}
-			checkupConfigurationArgument("onMenuShareAppMessage", oConfiguration);
+			argumentsTypeChecker.confirmPlainObject( "onMenuShareAppMessage", oConfiguration, true);
+			
 			var oDefaultConfiguration = 
 			{
 			   title: sTitle, // 分享标题
@@ -114,7 +148,8 @@ function InvokeWechatAPI()
 			{
 				throw new Error("onMenuShareQQ方法至少需要四个字符串参数来指定分享标题、分享描述、分享链接和分享图标");
 			}
-			checkupConfigurationArgument("onMenuShareQQ", oConfiguration);
+			argumentsTypeChecker.confirmPlainObject( "onMenuShareQQ", oConfiguration, true);
+			
 			var oDefaultConfiguration = 
 			{
 				title: sTitle, // 分享标题
@@ -133,7 +168,8 @@ function InvokeWechatAPI()
 		 */
 		InvokeWechatAPI.prototype.chooseImage = function(fnSuccessCallback, oConfiguration)
 		{
-			checkupConfigurationArgument("chooseImage", oConfiguration);
+			argumentsTypeChecker.confirmPlainObject( "chooseImage", oConfiguration, true);
+			
 			var oDefaultConfiguration = 
 			{
 				success: fnSuccessCallback
@@ -151,6 +187,7 @@ function InvokeWechatAPI()
 			{
 				throw new TypeError("previewImage方法参数错误")
 			}
+			
 			wx.previewImage({
 				current: sCurrentImageUrl, // 当前显示图片的http链接
 				urls: aPreviewImageUrl // 需要预览的图片http链接列表
@@ -170,11 +207,9 @@ function InvokeWechatAPI()
 			{
 				throw new TypeError("uploadImage方法必须将chooseImage方法获得的localId组成的数组作为参数")
 			}
-			if( typeof fnSuccessCallback !== "function" )
-			{
-				throw new TypeError("uploadImage方法第二个参数必须是回调函数")
-			}
-			checkupConfigurationArgument("uploadImage", oConfiguration);
+			argumentsTypeChecker.confirmPlainObject( "uploadImage", oConfiguration, true)
+								.checkArgumentsType( "uploadImage", [fnSuccessCallback], "function"); 		
+								
 			var oDefaultConfiguration = 
 			{
 				localId: '', // 需要上传的图片的本地ID，由chooseImage接口获得
@@ -213,11 +248,9 @@ function InvokeWechatAPI()
 			{
 				throw new Error("downloadImage方法需要传入uploadImage方法获取到的图片ID数组");
 			}
-			if( typeof fnSuccessCallback !== "function" )
-			{
-				throw new TypeError("downloadImage方法第二个参数必须是回调函数")
-			}
-			checkupConfigurationArgument("downloadImage", oConfiguration);
+			argumentsTypeChecker.confirmPlainObject( "downloadImage", oConfiguration, true)
+								.checkArgumentsType( "downloadImage", [fnSuccessCallback], "function"); 
+								
 			var oDefaultConfiguration = 
 			{
 				serverId: '', // 需要下载的图片的服务器端ID，由uploadImage接口获得
@@ -242,6 +275,191 @@ function InvokeWechatAPI()
 		};
 		
 		
+		// 开始录音接口
+		InvokeWechatAPI.prototype.startRecord = function()
+		{	
+			wx.startRecord();
+		};
+		
+		// 停止录音接口
+		/*
+		 * 参数为回调函数，接受一个参数，引用该段录音的localId
+		 */
+		InvokeWechatAPI.prototype.stopRecord = function( fnSuccessCallback )
+		{
+			argumentsTypeChecker.checkArgumentsType("stopRecord", [fnSuccessCallback], "function");
+			
+			wx.stopRecord(
+			{
+				complete: function (res) 
+				{
+					var localId = res.localId;
+					fnSuccessCallback(localId);
+				}
+			});
+		};
+		
+		// 监听录音自动停止接口
+		/*
+		 * 录音时间超过一分钟没有停止的时候会执行 complete 回调
+		 * 参数为回调函数，接受一个参数，引用该段录音的localId
+		 */
+		InvokeWechatAPI.prototype.onVoiceRecordEnd = function( fnSuccessCallback )
+		{
+			argumentsTypeChecker.checkArgumentsType("onVoiceRecordEnd", [fnSuccessCallback], "function");
+			
+			wx.onVoiceRecordEnd(
+			{
+				complete: function (res) 
+				{
+					var localId = res.localId; 
+					fnSuccessCallback(localId);
+				}
+			});
+		};
+		
+		// 播放语音接口
+		/*
+		 * 参数为onVoiceRecordEnd或stopVoice获得的localId
+		 */
+		InvokeWechatAPI.prototype.playVoice = function( sLocalId )
+		{	
+			argumentsTypeChecker.checkArgumentsType("playVoice", [sLocalId], "string");
+
+			wx.playVoice(
+			{	
+				localId: sLocalId 
+			});
+		};
+		
+		// 暂停播放接口
+		InvokeWechatAPI.prototype.pauseVoice = function(sLocalId)
+		{	
+			argumentsTypeChecker.checkArgumentsType("pauseVoice", [sLocalId], "string");
+			
+			wx.pauseVoice(
+			{
+				localId: sLocalId // 需要暂停的音频的本地ID，由stopRecord接口获得
+			});
+		};
+		
+		// 停止播放接口
+		InvokeWechatAPI.prototype.stopVoice = function(sLocalId)
+		{	
+			argumentsTypeChecker.checkArgumentsType("stopVoice", [sLocalId], "string");
+			
+			wx.pauseVoice(
+			{
+				localId: sLocalId // 需要暂停的音频的本地ID，由stopRecord接口获得
+			});
+		};
+		
+		// 监听语音播放完毕接口
+		/*
+		 * 参数为回调函数，接受一个参数，引用该段录音的localId
+		 */
+		InvokeWechatAPI.prototype.onVoicePlayEnd = function(fnSuccessCallback)
+		{	
+			argumentsTypeChecker.checkArgumentsType("onVoicePlayEnd", [fnSuccessCallback], "function");
+			
+			wx.onVoicePlayEnd(
+			{
+				success: function (res) 
+				{
+					var localId = res.localId; // 返回音频的本地ID
+					fnSuccessCallback(localId);
+				}
+			});
+		};
+		
+		// 上传语音接口
+		/*
+		 * 第二个参数为回调函数，接受一个参数，引用该段录音的serverId
+		 */
+		InvokeWechatAPI.prototype.uploadVoice = function(sLocalId, fnSuccessCallback)
+		{	
+			argumentsTypeChecker.checkArgumengsAmount("uploadVoice", arguments, 2)
+								.checkArgumentsType("uploadVoice", [sLocalId], "string")
+								.checkArgumentsType("uploadVoice", [fnSuccessCallback], "function");
+								
+			wx.uploadVoice(
+			{
+				localId: sLocalId,
+				isShowProgressTips: 1,
+				success: function (res) 
+				{
+					var serverId = res.serverId; // 返回音频的服务器端ID
+					fnSuccessCallback(serverId);
+				}
+			});
+		};
+		
+		// 下载语音接口
+		/*
+		 * 第二个参数为回调函数，接受一个参数，引用被下载的录音的localId
+		 */
+		InvokeWechatAPI.prototype.downloadVoice = function(sServerId, fnSuccessCallback)
+		{	alert(2);
+			argumentsTypeChecker.checkArgumengsAmount("downloadVoice", arguments, 2)
+								.checkArgumentsType("downloadVoice", [sLocalId], "string")
+								.checkArgumentsType("downloadVoice", [fnSuccessCallback], "function");
+			alert(3);					
+			wx.downloadVoice(
+			{	
+				serverId: sServerId, // 需要下载的音频的服务器端ID，由uploadVoice接口获得
+				isShowProgressTips: 1, // 默认为1，显示进度提示
+				success: function (res) 
+				{	alert(4);	
+					var localId = res.localId; // 返回音频的本地ID
+					fnSuccessCallback(localId);
+				}
+			});
+		};
+		
+		
+		// 获取网络状态接口
+		/*
+		 * 参数为获得网络状态之后的回调函数，该回调函数接受一个参数，引用网络类型
+		 */
+		InvokeWechatAPI.prototype.getNetworkType = function( fnSuccessCallback )
+		{
+			argumentsTypeChecker.checkArgumentsType("getNetworkType", [fnSuccessCallback], "function");
+			
+			wx.getNetworkType(
+			{
+				success: function (res) 
+				{
+					var networkType = res.networkType; // 返回网络类型2g，3g，4g，wifi
+					fnSuccessCallback(networkType);
+				}
+			});
+		};
+		
+		
+		// 使用微信内置地图查看位置接口
+		/*
+		 * 前四个是必选参数
+		 * 经纬度参数传数字值。东经和北纬是整数，西经和南纬是负数。
+		 * 第五个是可选参数，表示显示比例尺，默认14
+		 * 第六个是可选参数，表示查看位置页面底部的超链接地址
+		 */
+		InvokeWechatAPI.prototype.openLocation = function(nLongitude, nLatitude, sPositionName, sAddress, nScale, sInfoUrl)
+		{
+			argumentsTypeChecker.checkArgumengsAmount( "openLocation", arguments, 4 )
+								.checkArgumentsType("openLocation", [arguments[0], arguments[1]], "number")
+								.checkArgumentsType("openLocation", [arguments[2], arguments[3]], "string"); 
+								
+			nScale = nScale?nScale:14;
+			sInfoUrl = sInfoUrl?sInfoUrl:"";
+			wx.openLocation({
+				latitude: nLatitude, // 纬度，浮点数，范围为90 ~ -90
+				longitude: nLongitude, // 经度，浮点数，范围为180 ~ -180。
+				name: sPositionName, // 位置名
+				address: sAddress, // 地址详情说明
+				scale: nScale, // 地图缩放级别,整形值,范围从1~28。默认为最大
+				infoUrl: sInfoUrl // 在查看位置界面底部显示的超链接,可点击跳转
+			});
+		};
 		
 		// 获取地理位置接口
 		/*
@@ -249,7 +467,8 @@ function InvokeWechatAPI()
 		 */
 		InvokeWechatAPI.prototype.getLocation = function( oConfiguration )
 		{
-			checkupConfigurationArgument("getLocation", oConfiguration);
+			argumentsTypeChecker.confirmPlainObject( "getLocation", oConfiguration, true); 
+								
 			var oDefaultConfiguration = {
 				success: function (res) 
 				{
@@ -261,6 +480,9 @@ function InvokeWechatAPI()
 			};
 			wx.getLocation( Object.assign(oDefaultConfiguration, oConfiguration) );
 		};
+		
+		
+		
 		
 	}
 }
