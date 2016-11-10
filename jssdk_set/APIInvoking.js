@@ -161,6 +161,8 @@ function InvokeWechatAPI()
 
 		};
 		
+		
+		
 		// 拍照或从手机相册中选图接口
 		/*
 		 * 第一个参数是选取图片之后的要执行的函数。需要传入一个参数代表响应的对象，该对象的localIds属性保存着选定照片的localId组成的数组，localId可以作为img标签的src属性显示图片
@@ -273,6 +275,7 @@ function InvokeWechatAPI()
 				wx.downloadImage(oConfiguration);
 			});
 		};
+		
 		
 		
 		// 开始录音接口
@@ -418,6 +421,26 @@ function InvokeWechatAPI()
 		
 		
 		
+		// 识别音频并返回识别结果接口
+		/*
+		 * 第二个参数为回调函数，接受一个参数，引用被识别的结果字符串
+		 */
+		InvokeWechatAPI.prototype.translateVoice = function (sLocalId, fnSuccessCallback)
+		{
+			wx.translateVoice(
+			{
+					localId: sLocalId, // 需要识别的音频的本地Id，由录音相关接口获得
+					isShowProgressTips: 1, // 默认为1，显示进度提示
+					success: function(res)
+					{ 
+						var sTranslateResult = res.translateResult;
+						fnSuccessCallback(sTranslateResult);
+					}			
+			});				
+		};
+
+		
+		
 		// 获取网络状态接口
 		/*
 		 * 参数为获得网络状态之后的回调函数，该回调函数接受一个参数，引用网络类型
@@ -429,11 +452,12 @@ function InvokeWechatAPI()
 			wx.getNetworkType(
 			{
 				success: function (res) 
-				{
+				{	
 					var networkType = res.networkType; // 返回网络类型2g，3g，4g，wifi
 					fnSuccessCallback(networkType);
 				}
 			});
+			
 		};
 		
 		
@@ -484,8 +508,95 @@ function InvokeWechatAPI()
 		};
 		
 		
+		 
+		// 隐藏右上角菜单接口
+		InvokeWechatAPI.prototype.hideOptionMenu = function()
+		{
+			wx.hideOptionMenu();
+		};
+		
+		// 显示右上角菜单接口
+		InvokeWechatAPI.prototype.showOptionMenu = function()
+		{
+			wx.showOptionMenu();
+		};
+		
+		// 关闭当前网页窗口接口
+		InvokeWechatAPI.prototype.closeWindow = function()
+		{
+			wx.closeWindow();
+		};
+		
+		// 批量隐藏功能按钮接口
+		InvokeWechatAPI.prototype.hideMenuItems = function(aInterfaces)
+		{
+			argumentsTypeChecker.checkArgumentsType("showMenuItems", [aInterfaces], "array");
+			
+			wx.hideMenuItems(
+			{
+				menuList: aInterfaces // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+			});
+		};
+		
+		// 批量显示功能按钮接口
+		InvokeWechatAPI.prototype.showMenuItems = function(aInterfaces)
+		{
+			argumentsTypeChecker.checkArgumentsType("showMenuItems", [aInterfaces], "array");
+			
+			wx.showMenuItems({
+				menuList: aInterfaces // 要显示的菜单项，所有menu项见附录3
+			});
+		};
+		
+		// 隐藏所有非基础按钮接口
+		InvokeWechatAPI.prototype.hideAllNonBaseMenuItem = function()
+		{
+			wx.hideAllNonBaseMenuItem(); // “基本类”按钮详见附录3
+		};
+		
+		// 显示所有功能按钮接口
+		InvokeWechatAPI.prototype.showAllNonBaseMenuItem = function()
+		{
+			wx.showAllNonBaseMenuItem();
+		};
 		
 		
+		
+		//调起微信扫一扫接口
+		/*
+		 * 可选参数如果为真，则直接返回扫描结果给回调函数。否则由微信处理扫描结果
+		 * 如果设置为真，则还需要传入回调函数作为第二个参数。该回调函数的参数引用扫描结果
+		 */
+		 
+		 
+		 
+		 
+		//  不知道是缓存还是什么原因，这个函数不会被调用 
+		 
+		 
+		 
+		InvokeWechatAPI.prototype.scanQRCode = function( bReturnScanResult, fnSuccessCallback)
+		{
+			if( arguments.length >1 )
+			{
+				argumentsTypeChecker.checkArgumentsType("scanQRCode", [fnSuccessCallback], "function");
+			}
+			
+			wx.scanQRCode(
+			{
+				needResult: (bReturnScanResult?1:0), // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+				scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+				success: function (res) 
+				{
+					if( bReturnScanResult )
+					{
+						var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+						fnSuccessCallback(result);
+					}
+					
+				}
+			});
+		};
 	}
 }
 
