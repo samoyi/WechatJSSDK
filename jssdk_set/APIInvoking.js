@@ -567,14 +567,6 @@ function InvokeWechatAPI()
 		 * 可选参数如果为真，则直接返回扫描结果给回调函数。否则由微信处理扫描结果
 		 * 如果设置为真，则还需要传入回调函数作为第二个参数。该回调函数的参数引用扫描结果
 		 */
-		 
-		 
-		 
-		 
-		//  不知道是缓存还是什么原因，这个函数不会被调用 
-		 
-		 
-		 
 		InvokeWechatAPI.prototype.scanQRCode = function( bReturnScanResult, fnSuccessCallback)
 		{
 			if( arguments.length >1 )
@@ -587,9 +579,9 @@ function InvokeWechatAPI()
 				needResult: (bReturnScanResult?1:0), // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
 				scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
 				success: function (res) 
-				{
+				{	
 					if( bReturnScanResult )
-					{
+					{	
 						var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
 						fnSuccessCallback(result);
 					}
