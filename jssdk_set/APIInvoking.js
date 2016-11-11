@@ -34,6 +34,7 @@ function InvokeWechatAPI()
 		{
 			if( showTypeWithLowerCase( item ) !== sExpectedType )
 			{
+				alert( sFunctionName + "方法的参数类型错误，期望类型为：" + sExpectedType );
 				throw new TypeError( sFunctionName + "方法的参数类型错误，期望类型为：" + sExpectedType );
 			}
 		});
@@ -44,6 +45,7 @@ function InvokeWechatAPI()
 	{
 		if( oConfigurationArgument && (typeof oConfigurationArgument !== "object") )
 		{
+			alert(sFunctionName + "方法参数只能是object类型");
 			throw new TypeError(sFunctionName + "方法参数只能是object类型");
 		}
 	}
@@ -60,6 +62,7 @@ function InvokeWechatAPI()
 				// We must check against these specific cases.
 				if (target === undefined || target === null) 
 				{
+					alert("Object.assign函数的target参数不能使undefined或者null");
 					throw new TypeError('Cannot convert undefined or null to object');
 				}
 
@@ -101,6 +104,7 @@ function InvokeWechatAPI()
 		{
 			if( arguments.length <3 || Array.prototype.some.call(arguments, function(item){ return typeof item !== "string"; })) // 判断是否有三个字符串参数
 			{
+				alert("onMenuShareTimeline方法至少需要三个字符串参数来指定分享标题、分享链接和分享图标");
 				throw new Error("onMenuShareTimeline方法至少需要三个字符串参数来指定分享标题、分享链接和分享图标");
 			}
 			argumentsTypeChecker.confirmPlainObject( "onMenuShareTimeline", arguments[3], true);
@@ -123,6 +127,7 @@ function InvokeWechatAPI()
 		{
 			if( arguments.length <4 || Array.prototype.some.call(arguments, function(item){ return typeof item !== "string"; })) // 判断是否有四个字符串参数
 			{
+				alert("onMenuShareAppMessage方法至少需要四个字符串参数来指定分享标题、分享描述、分享链接和分享图标");
 				throw new Error("onMenuShareAppMessage方法至少需要四个字符串参数来指定分享标题、分享描述、分享链接和分享图标");
 			}
 			argumentsTypeChecker.confirmPlainObject( "onMenuShareAppMessage", oConfiguration, true);
@@ -146,6 +151,7 @@ function InvokeWechatAPI()
 		{
 			if( arguments.length <4 || Array.prototype.some.call(arguments, function(item){ return typeof item !== "string"; })) // 判断是否有四个字符串参数
 			{
+				alert("onMenuShareQQ方法至少需要四个字符串参数来指定分享标题、分享描述、分享链接和分享图标");
 				throw new Error("onMenuShareQQ方法至少需要四个字符串参数来指定分享标题、分享描述、分享链接和分享图标");
 			}
 			argumentsTypeChecker.confirmPlainObject( "onMenuShareQQ", oConfiguration, true);
@@ -187,7 +193,8 @@ function InvokeWechatAPI()
 		{
 			if( (typeof arguments[0] !== "string") || !Array.isArray(arguments[1]) || arguments[1].length<1 )
 			{
-				throw new TypeError("previewImage方法参数错误")
+				alert("previewImage方法参数错误");
+				throw new TypeError("previewImage方法参数错误");
 			}
 			
 			wx.previewImage({
@@ -207,7 +214,8 @@ function InvokeWechatAPI()
 		{	
 			if( !Array.isArray(arguments[0]) || arguments[0].length<1 )
 			{
-				throw new TypeError("uploadImage方法必须将chooseImage方法获得的localId组成的数组作为参数")
+				alert("uploadImage方法必须将chooseImage方法获得的localId组成的数组作为参数");
+				throw new TypeError("uploadImage方法必须将chooseImage方法获得的localId组成的数组作为参数");
 			}
 			argumentsTypeChecker.confirmPlainObject( "uploadImage", oConfiguration, true)
 								.checkArgumentsType( "uploadImage", [fnSuccessCallback], "function"); 		
@@ -248,6 +256,7 @@ function InvokeWechatAPI()
 		{
 			if( arguments.length<1 || !Array.isArray(aServerId) )
 			{
+				alert("downloadImage方法需要传入uploadImage方法获取到的图片ID数组");
 				throw new Error("downloadImage方法需要传入uploadImage方法获取到的图片ID数组");
 			}
 			argumentsTypeChecker.confirmPlainObject( "downloadImage", oConfiguration, true)
@@ -587,6 +596,29 @@ function InvokeWechatAPI()
 					}
 					
 				}
+			});
+		};
+		
+		
+		
+		// 跳转微信商品页接口
+		InvokeWechatAPI.prototype.openProductSpecificView = function(sProductID, nViewType)
+		{
+			argumentsTypeChecker.checkArgumentsType("openProductSpecificView", [sProductID], "string");
+			if( nViewType && nViewType!==1 && nViewType!==2 )
+			{
+				alert("openProductSpecificView方法的可选参数nViewType只能是0、1、2三个数字之一");
+				throw new TypeError("openProductSpecificView方法的可选参数nViewType只能是0、1、2三个数字之一");
+			}
+			else
+			{
+				nViewType = 0;
+			}
+			
+			wx.openProductSpecificView(
+			{
+				productId: sProductID, // 商品id
+				viewType: nViewType // 0.默认值，普通商品详情页1.扫一扫商品详情页2.小店商品详情页
 			});
 		};
 	}
