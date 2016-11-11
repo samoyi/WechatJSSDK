@@ -14,6 +14,39 @@ function InvokeWechatAPI()
 	
 	// public functions ------------------------------------------------------
 
+	// AjaxGet
+	/*
+	 * 可选的fnSuccessCallback接受一个参数引用 responseText
+	 * 可选的fnFailCallbackstatus接受一个参数引用 status
+	 * 如果有参数直接写进 sUrl
+	 */
+	function AjaxGet(sUrl, fnSuccessCallback, fnFailCallback)
+	{
+		var xhr = new XMLHttpRequest();
+		xhr.addEventListener('readystatechange', function()
+		{
+			if (xhr.readyState == 4)
+			{
+				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304)
+				{
+					if(fnSuccessCallback)
+					{
+						fnSuccessCallback( xhr.responseText );
+					}
+				}
+				else 
+				{
+					if(fnFailCallback)
+					{
+						fnFailCallback( xhr.status );
+					}
+				}
+			}
+		}, false);
+		xhr.open("get", sUrl, true);
+		xhr.send(null);		
+	}
+	
 	// get type of checked with lower case
 	function showTypeWithLowerCase( checked )
 	{
@@ -621,6 +654,11 @@ function InvokeWechatAPI()
 				viewType: nViewType // 0.默认值，普通商品详情页1.扫一扫商品详情页2.小店商品详情页
 			});
 		};
+		
+		
+
+		
+
 	}
 }
 
