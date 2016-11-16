@@ -23,7 +23,7 @@
 
 ### 使用方法：
 1. 将 jssdk_set 文件夹放到主页面（这里是index.php）同级的位置
-2. 在这页面填写APPID和APPSECRET
+2. 在主页面填写APPID和APPSECRET
 3. 在wx.ready回调时就要调用的接口直接放进其回调函数中，之后再调用的接口可以放到外部
 4. 所有的接口调用都通过 InvokeWechatAPI类的相应原型方法。见 APIInvoking.js 文件。
 
