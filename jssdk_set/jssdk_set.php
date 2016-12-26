@@ -25,6 +25,7 @@ wx.config(
       'onMenuShareTimeline',
       'onMenuShareAppMessage',
 	  'onMenuShareQQ',
+	  'onMenuShareQZone',
 	  'chooseImage',
 	  'previewImage',
 	  'uploadImage',

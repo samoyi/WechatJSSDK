@@ -3,8 +3,9 @@
 
 /* TODO 
  * 1. 每个调用函数都要单独调用一下checkupConfigurationArgument函数
- *
- *
+ * 2. Array.prototype.some.call 会把最后一个可选的对象参数也检查了
+ * 3. 怎么获得定位的地址
+ * 4. 删除 confirmArgumentsType 函数
  */
 
 function InvokeWechatAPI()
@@ -135,12 +136,9 @@ function InvokeWechatAPI()
 		 */
 		InvokeWechatAPI.prototype.onMenuShareTimeline = function(sTitle, sLink, sImgUrl, oConfiguration)
 		{
-			if( arguments.length <3 || Array.prototype.some.call(arguments, function(item){ return typeof item !== "string"; })) // 判断是否有三个字符串参数
-			{
-				alert("onMenuShareTimeline方法至少需要三个字符串参数来指定分享标题、分享链接和分享图标");
-				throw new Error("onMenuShareTimeline方法至少需要三个字符串参数来指定分享标题、分享链接和分享图标");
-			}
-			argumentsTypeChecker.confirmPlainObject( "onMenuShareTimeline", arguments[3], true);
+			argumentsTypeChecker.checkArgumengsAmount("onMenuShareTimeline", arguments, 3)
+								.checkArgumentsType("onMenuShareTimeline", Array.prototype.slice.call(arguments, 0, 3), "string")
+								.confirmPlainObject("onMenuShareTimeline", oConfiguration, true);
 			
 			var oDefaultConfiguration = 
 			{
@@ -158,12 +156,9 @@ function InvokeWechatAPI()
 		 */
 		InvokeWechatAPI.prototype.onMenuShareAppMessage = function(sTitle, sDes, sLink, sImgUrl, oConfiguration)
 		{
-			if( arguments.length <4 || Array.prototype.some.call(arguments, function(item){ return typeof item !== "string"; })) // 判断是否有四个字符串参数
-			{
-				alert("onMenuShareAppMessage方法至少需要四个字符串参数来指定分享标题、分享描述、分享链接和分享图标");
-				throw new Error("onMenuShareAppMessage方法至少需要四个字符串参数来指定分享标题、分享描述、分享链接和分享图标");
-			}
-			argumentsTypeChecker.confirmPlainObject( "onMenuShareAppMessage", oConfiguration, true);
+			argumentsTypeChecker.checkArgumengsAmount("onMenuShareAppMessage", arguments, 4)
+								.checkArgumentsType("onMenuShareAppMessage", Array.prototype.slice.call(arguments, 0, 4), "string")
+								.confirmPlainObject("onMenuShareAppMessage", oConfiguration, true);
 			
 			var oDefaultConfiguration = 
 			{
@@ -182,12 +177,9 @@ function InvokeWechatAPI()
 		 */
 		InvokeWechatAPI.prototype.onMenuShareQQ = function(sTitle, sDes, sLink, sImgUrl, oConfiguration)
 		{
-			if( arguments.length <4 || Array.prototype.some.call(arguments, function(item){ return typeof item !== "string"; })) // 判断是否有四个字符串参数
-			{
-				alert("onMenuShareQQ方法至少需要四个字符串参数来指定分享标题、分享描述、分享链接和分享图标");
-				throw new Error("onMenuShareQQ方法至少需要四个字符串参数来指定分享标题、分享描述、分享链接和分享图标");
-			}
-			argumentsTypeChecker.confirmPlainObject( "onMenuShareQQ", oConfiguration, true);
+			argumentsTypeChecker.checkArgumengsAmount("onMenuShareQQ", arguments, 4)
+								.checkArgumentsType("onMenuShareQQ", Array.prototype.slice.call(arguments, 0, 4), "string")
+								.confirmPlainObject("onMenuShareQQ", oConfiguration, true);
 			
 			var oDefaultConfiguration = 
 			{
@@ -200,36 +192,58 @@ function InvokeWechatAPI()
 
 		};
 		
+		// 分享到QQ空间
+		/*
+		 * 默认的四个参数为分享标题、分享描述、分享链接、分享图标地址
+		 * 如果要修改配置，传入整个配置对象作为第五个参数，将以 Object.assign() 的方式改写默认参数
+		 */
+		InvokeWechatAPI.prototype.onMenuShareQZone = function(sTitle, sDes, sLink, sImgUrl, oConfiguration)
+		{
+			argumentsTypeChecker.checkArgumengsAmount("onMenuShareQZone", arguments, 4)
+								.checkArgumentsType("onMenuShareQZone", Array.prototype.slice.call(arguments, 0, 4), "string")
+								.confirmPlainObject("onMenuShareQZone", oConfiguration, true);
+			
+			var oDefaultConfiguration = 
+			{
+				title: sTitle, // 分享标题
+				desc: sDes, // 分享描述
+				link: sLink, // 分享链接
+				imgUrl: sImgUrl // 分享图标
+			};
+			wx.onMenuShareQZone( Object.assign(oDefaultConfiguration, oConfiguration) );
+
+		};
 		
 		
 		// 拍照或从手机相册中选图接口
 		/*
 		 * 第一个参数是选取图片之后的要执行的函数。需要传入一个参数代表响应的对象，该对象的localIds属性保存着选定照片的localId组成的数组，localId可以作为img标签的src属性显示图片
-		 * 如果要修改配置，传入整个配置对象参数，将以 Object.assign() 的方式改写默认参数
+		 * 如果要修改配置，传入整个配置对象参数oConfiguration，将以 Object.assign() 的方式改写默认参数
 		 */
 		InvokeWechatAPI.prototype.chooseImage = function(fnSuccessCallback, oConfiguration)
 		{
-			argumentsTypeChecker.confirmPlainObject( "chooseImage", oConfiguration, true);
-			
+			argumentsTypeChecker.checkArgumentsType( "chooseImage", [fnSuccessCallback], "function")
+								.confirmPlainObject( "chooseImage", oConfiguration, true);
 			var oDefaultConfiguration = 
 			{
-				success: fnSuccessCallback
+				success: function (res) {
+					fnSuccessCallback(res);
+				}
 			};
 			wx.chooseImage( Object.assign(oDefaultConfiguration, oConfiguration) );
-		};
+		}; 
+
 		
 		// 预览图片接口
 		/*
-		 * 第一个参数是启动预览后要显示的图片，第二个参数是所有要预览的图片的url
+		 * 第一个参数是启动预览后要显示的图片的url，第二个参数是所有要预览的图片的url组成的数组。上述url都可以使用chooseImage方法获得的localId
+		 * 如果要修改配置，传入整个配置对象参数oConfiguration，将以 Object.assign() 的方式改写默认参数
 		 */
-		InvokeWechatAPI.prototype.previewImage = function(sCurrentImageUrl, aPreviewImageUrl)
+		InvokeWechatAPI.prototype.previewImage = function(sCurrentImageUrl, aPreviewImageUrl, oConfiguration)
 		{
-			if( (typeof arguments[0] !== "string") || !Array.isArray(arguments[1]) || arguments[1].length<1 )
-			{
-				alert("previewImage方法参数错误");
-				throw new TypeError("previewImage方法参数错误");
-			}
-			
+			argumentsTypeChecker.checkArgumentsType( "previewImage", [sCurrentImageUrl], "string")
+								.checkArgumentsType( "previewImage", [aPreviewImageUrl], "array")
+								.confirmPlainObject( "previewImage", oConfiguration, true);
 			wx.previewImage({
 				current: sCurrentImageUrl, // 当前显示图片的http链接
 				urls: aPreviewImageUrl // 需要预览的图片http链接列表
@@ -238,6 +252,7 @@ function InvokeWechatAPI()
 		
 		// 上传图片接口
 		/*
+		 * 第一个参数是需要上传的图片的本地ID组成的数组。
 		 * 如果要上传chooseImage方法中获得的图片，需要在chooseImage方法的回调中调用该方法
 		 * 如果要修改配置，传入整个配置对象参数，将以 Object.assign() 的方式改写默认参数
 		 * 可以传入fnSuccessCallback可选参数作为全部上传成功之后的回调函数，它只是作为success回调函数的一部分，
@@ -245,14 +260,11 @@ function InvokeWechatAPI()
 		 */
 		InvokeWechatAPI.prototype.uploadImage = function(aLocalIds, fnSuccessCallback, oConfiguration)
 		{	
-			if( !Array.isArray(arguments[0]) || arguments[0].length<1 )
-			{
-				alert("uploadImage方法必须将chooseImage方法获得的localId组成的数组作为参数");
-				throw new TypeError("uploadImage方法必须将chooseImage方法获得的localId组成的数组作为参数");
-			}
-			argumentsTypeChecker.confirmPlainObject( "uploadImage", oConfiguration, true)
-								.checkArgumentsType( "uploadImage", [fnSuccessCallback], "function"); 		
-								
+
+			argumentsTypeChecker.checkArgumentsType( "uploadImage", [aLocalIds], "array")
+								.checkArgumentsType( "uploadImage", [fnSuccessCallback], "function")
+								.confirmPlainObject( "uploadImage", oConfiguration, true);	
+					
 			var oDefaultConfiguration = 
 			{
 				localId: '', // 需要上传的图片的本地ID，由chooseImage接口获得
@@ -287,13 +299,9 @@ function InvokeWechatAPI()
 		 */
 		InvokeWechatAPI.prototype.downloadImage = function(aServerId, fnSuccessCallback, oConfiguration)
 		{
-			if( arguments.length<1 || !Array.isArray(aServerId) )
-			{
-				alert("downloadImage方法需要传入uploadImage方法获取到的图片ID数组");
-				throw new Error("downloadImage方法需要传入uploadImage方法获取到的图片ID数组");
-			}
-			argumentsTypeChecker.confirmPlainObject( "downloadImage", oConfiguration, true)
-								.checkArgumentsType( "downloadImage", [fnSuccessCallback], "function"); 
+			argumentsTypeChecker.checkArgumentsType( "downloadImage", [aServerId], "array")
+								.checkArgumentsType( "downloadImage", [fnSuccessCallback], "function")
+								.confirmPlainObject( "downloadImage", oConfiguration, true); 
 								
 			var oDefaultConfiguration = 
 			{
@@ -659,9 +667,8 @@ function InvokeWechatAPI()
 		};
 		
 		
-
 		
-
+		
 	}
 }
 
