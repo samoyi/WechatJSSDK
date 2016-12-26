@@ -531,12 +531,14 @@ function InvokeWechatAPI()
 		
 		// 获取地理位置接口
 		/*
-		 * 如果要修改配置，传入整个配置对象，将以 Object.assign() 的方式改写默认参数
+		 * 必选参数为获取到地理位置信息之后的回调函数fnSuccessCallback，需要给该函数传入一个参数，相当于官方文档该接口的res参数
+		 * 如果要修改配置，传入整个配置对象作为第二个参数，将以 Object.assign() 的方式改写默认参数
 		 */
-		InvokeWechatAPI.prototype.getLocation = function( oConfiguration )
+		InvokeWechatAPI.prototype.getLocation = function( fnSuccessCallback,oConfiguration )
 		{
-			argumentsTypeChecker.confirmPlainObject( "getLocation", oConfiguration, true); 
-								
+			argumentsTypeChecker.checkArgumentsType("getLocation", [fnSuccessCallback], "function")
+								.confirmPlainObject( "getLocation", oConfiguration, true); 
+						
 			var oDefaultConfiguration = {
 				success: function (res) 
 				{
@@ -544,6 +546,7 @@ function InvokeWechatAPI()
 					var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
 					var speed = res.speed; // 速度，以米/每秒计
 					var accuracy = res.accuracy; // 位置精度
+					fnSuccessCallback(res);
 				}
 			};
 			wx.getLocation( Object.assign(oDefaultConfiguration, oConfiguration) );
