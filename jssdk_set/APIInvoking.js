@@ -2,10 +2,7 @@
 
 
 /* TODO 
- * 1. 每个调用函数都要单独调用一下checkupConfigurationArgument函数
- * 2. Array.prototype.some.call 会把最后一个可选的对象参数也检查了
- * 3. 怎么获得定位的地址
- * 4. 删除 confirmArgumentsType 函数
+ *
  */
 
 function InvokeWechatAPI()
@@ -54,36 +51,7 @@ function InvokeWechatAPI()
 		var sType = Object.prototype.toString.call(checked).slice(8, -1);
 		return sType.toLowerCase();
 	}
-	
-	// 检查一个组参数是否都是是指定类型
-	/*
-	 * 第一个参数是被检查的函数名，用来报错是提示是哪个函数
-	 * 第二个参数是要检查的参数组成的数组或整个arguments对象
-	 * 第三个参数是期望的类型，如果被检测参数中有一项不是该类型就会报错，不区分大小写
-	 */
-	function confirmArgumentsType(sFunctionName, aArguments, sExpectedType)
-	{
-		sExpectedType = sExpectedType.toLocaleLowerCase();
-		Array.prototype.forEach.call(aArguments, function(item, index)
-		{
-			if( showTypeWithLowerCase( item ) !== sExpectedType )
-			{
-				alert( sFunctionName + "方法的参数类型错误，期望类型为：" + sExpectedType );
-				throw new TypeError( sFunctionName + "方法的参数类型错误，期望类型为：" + sExpectedType );
-			}
-		});
-	}
-	
-	// 如果设置了某个参数，该参数是否是引用类型
-	function checkupConfigurationArgument(sFunctionName, oConfigurationArgument)
-	{
-		if( oConfigurationArgument && (typeof oConfigurationArgument !== "object") )
-		{
-			alert(sFunctionName + "方法参数只能是object类型");
-			throw new TypeError(sFunctionName + "方法参数只能是object类型");
-		}
-	}
-	
+
 	
 	// Polyfill Object.assign
 	if (typeof Object.assign != 'function') 
