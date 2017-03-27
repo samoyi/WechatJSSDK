@@ -636,7 +636,41 @@ function InvokeWechatAPI()
 		
 		
 		
-		
+		// 添加卡券接口
+		/*
+		 * 参数为卡券ID
+		 */
+		InvokeWechatAPI.prototype.addCard = function(sCardID)
+		{
+			argumentsTypeChecker.checkArgumentsType("addCard", [sCardID], "string");
+			var sUrl = "jssdk_set/ajax.php?cardSignatureData&cardid="+sCardID,
+				cardSignature = "",
+				fnSuccessCallback = function(res)
+				{	
+					res = JSON.parse(res);
+					var cardTimestamp = res.timestamp,
+						cardNonceStr = res.nonce_str,
+						cardSignature = res.cardSignature;
+
+					getCard(sCardID);	
+					function getCard(sCardID) 
+					{	
+						var data = {
+								cardList: [{
+												cardId: sCardID,
+												cardExt: '{"timestamp":' + cardTimestamp + ',"nonce_str":"' + cardNonceStr + '","signature":"' + cardSignature + '"}'
+										  }],
+								success: function(res)
+								{
+									var cardList = res.cardList; // 添加的卡券列表信息
+								}
+							};
+						wx.addCard(data);
+					}
+				};
+				
+			AjaxGet(sUrl, fnSuccessCallback);
+		}
 	}
 }
 
