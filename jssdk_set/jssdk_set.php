@@ -4,7 +4,7 @@
     $jssdk = new JSSDK(APPID, APPSECRET);
     $signPackage = $jssdk->GetSignPackage();
 
-    echo '<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>';
+    echo '<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>';
 	echo '<script src="jssdk_set/ArgumentsTypeCheckerForWechat.js"></script>';
 	echo '<script src="jssdk_set/APIInvoking.js"></script>';
 	
