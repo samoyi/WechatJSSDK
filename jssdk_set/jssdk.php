@@ -88,6 +88,7 @@
 		{
 			// jsapi_ticket 应该全局存储与更新，以下代码以写入到文件中做示例
 			$data = json_decode($this->get_php_file($this->cwd."jsapi_ticket.php"));
+			
 			if ($data->expire_time < time()) 
 			{
 				$accessToken = $this->getAccessToken();
@@ -114,22 +115,29 @@
 		{
 			// 先获取卡券 api_ticket
 			$data = json_decode($this->get_php_file($this->cwd."card_ticket.php"));
+			file_put_contents("../CardTicketMonintor.txt", "getCardSignature begin " . time() . "\n\n", FILE_APPEND );
 			if ($data->expire_time < time()) 
-			{
+			{	file_put_contents("../CardTicketMonintor.txt", "card ticket expires " . time() . "\n\n", FILE_APPEND );
 				$accessToken = $this->getAccessToken();
 				$url = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=' .$accessToken. '&type=wx_card';
 				$result = $this->httpGet($url);
 				$ticket = json_decode($result)->ticket;
 				if ($ticket) 
-				{
+				{	file_put_contents("../CardTicketMonintor.txt", "get a new card ticket " . time() . "\n\n", FILE_APPEND );
 					$data->expire_time = time() + 7000;
 					$data->card_ticket = $ticket;
 					$this->set_php_file($this->cwd."card_ticket.php", json_encode($data));
+				}
+				else{
+				
+					file_put_contents("../CardTicketMonintor.txt", "could not get new card ticket  front " . $accessToken .' '. time() . "\n\n", FILE_APPEND );
+					file_put_contents("../CardTicketMonintor.txt", "could not get new card ticket  " . $result .' '. time() . "\n\n", FILE_APPEND );
 				}
 			} 
 			else 
 			{
 				$ticket = $data->card_ticket;
+				file_put_contents("../CardTicketMonintor.txt", "card ticket dosen't expire " . date("Y-m-d H:i:s", $data->expire_time) . "\n\n", FILE_APPEND);
 			}
 			
 			// 再计算卡券signature
@@ -143,8 +151,7 @@
 			sort($check, SORT_STRING);
 			$signature = sha1( implode('', $check) );
 
-			$cardSignatureData->timestamp = $timestamp;
-			$cardSignatureData->nonce_str = $nonce_str;
+			// 下面这两行看不出来有什么用
 			
 			return $signature;
 		}
@@ -159,6 +166,7 @@
 				// $url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$this->appId&corpsecret=$this->appSecret";
 				$url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$this->appId&secret=$this->appSecret";
 				$res = json_decode($this->httpGet($url));
+				file_put_contents("CardTicketMonintor.txt", "ac refresh " . json_encode($res) .' '. time() . "\n\n", FILE_APPEND );
 				$access_token = $res->access_token;
 				if ($access_token) 
 				{
@@ -170,6 +178,7 @@
 			else 
 			{
 				$access_token = $data->access_token;
+				file_put_contents("CardTicketMonintor.txt", "ac doesn't expires " . json_encode($data) .' '. time() . "\n\n", FILE_APPEND );
 			}
 			return $access_token;
 		}
