@@ -14,7 +14,7 @@
 	define('APPID', '');
 	define('APPSECRET', '');
 
-	define('DEBUG', false); // 是否打开调试。自定义报错会带“debug_”前缀
+	define('WECHAT_DEBUG', false); // 是否打开调试。自定义报错会带“debug_”前缀
 	include("jssdk_set/jssdk_set.php");
 ?>
 <script>

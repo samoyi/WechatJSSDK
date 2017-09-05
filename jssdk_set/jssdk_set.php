@@ -15,7 +15,7 @@
 
 wx.config(
 {
-    debug: <?php echo json_encode(DEBUG); ?>, 
+    debug: <?php echo json_encode(WECHAT_DEBUG); ?>, 
     appId: '<?php echo $signPackage["appId"];?>',
     timestamp: <?php echo $signPackage["timestamp"];?>, // TODO 这一行如果放在JS文件中会报错，但放在php文件中的script标签中不会报错
     nonceStr: '<?php echo $signPackage["nonceStr"];?>',

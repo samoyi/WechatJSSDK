@@ -161,8 +161,7 @@
 				// $url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$this->appId&corpsecret=$this->appSecret";
 				$url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$this->appId&secret1=$this->appSecret";
 				$res = json_decode($this->httpGet($url));
-				file_put_contents('./jssdk_set/err.txt', json_encode(DEBUG));
-				if(DEBUG && $res->errmsg){
+				if(WECHAT_DEBUG && $res->errmsg){
 					echo '<script>alert("debug_"+' . json_encode($res->errmsg) . ');</script>';
 				}
 				$access_token = $res->access_token;
