@@ -159,7 +159,7 @@
 			{
 				// 如果是企业号用以下URL获取access_token
 				// $url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$this->appId&corpsecret=$this->appSecret";
-				$url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$this->appId&secret1=$this->appSecret";
+				$url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$this->appId&secret=$this->appSecret";
 				$res = json_decode($this->httpGet($url));
 				if(WECHAT_DEBUG && $res->errmsg){
 					echo '<script>alert("debug_"+' . json_encode($res->errmsg) . ');</script>';
